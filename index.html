@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migraine Awareness Hub</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f7ff;
+      color: #24233f;
+    }
+    header {
+      background: white;
+      padding: 20px;
+      color: #392d83;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .hero {
+      margin: 20px;
+      padding: 30px 22px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #e9e5ff, #fbeafa);
+      text-align: center;
+    }
+    .brain {
+      font-size: 75px;
+    }
+    h1 {
+      color: #392d83;
+      font-size: 32px;
+    }
+    p {
+      line-height: 1.6;
+    }
+    .button {
+      display: inline-block;
+      margin: 8px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 25px;
+      background: #6a5acd;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .card {
+      background: white;
+      margin: 15px 20px;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 5px 18px #6a5acd15;
+    }
+    h2 {
+      color: #392d83;
+    }
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #686780;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<header>✦ MIGRAINE AWARENESS HUB</header>
+
+<section class="hero">
+  <div class="brain">🧠</div>
+  <h1>Understand Your Brain.</h1>
+  <p>Learn about migraine, visual aura, symptoms and related neurological conditions.</p>
+  <button class="button" onclick="document.getElementById('learn').scrollIntoView({behavior:'smooth'})">
+    Explore & Learn
+  </button>
+</section>
+
+<section class="card" id="learn">
+  <h2>Learn About Migraine</h2>
+  <p>Discover migraine symptoms, types and possible effects on the nervous system.</p>
+</section>
+
+<section class="card">
+  <h2>Visual Aura</h2>
+  <p>Learn about temporary visual changes such as flashing lights, zigzag patterns and blind spots.</p>
+</section>
+
+<section class="card">
+  <h2>Symptom Check</h2>
+  <p>This educational app helps you review common symptoms. It cannot diagnose migraine.</p>
+  <button class="button" onclick="alert('This feature will be developed in the next step.')">
+    Start Symptom Check
+  </button>
+</section>
+
+<footer>
+  Migraine Awareness Hub<br>
+  Learn more. Feel more in control.<br>
+  Educational purposes only — not a medical diagnosis.
+</footer>
+
+</body>
+</html>
