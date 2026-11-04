@@ -1,45 +1,78 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Migraine Awareness Hub</title>
-  
-<link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="./icon-192.png">
-  
-<meta name="theme-color" content="#B69AD9">
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<meta name="apple-mobile-web-app-title"
-content="Migraine Hub">
-
-<meta name="apple-mobile-web-app-status-bar-style"
-content="default">
-
-  
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <meta name="theme-color" content="#B69AD9">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Migraine Hub">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
 <style>
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 70px; }
 
   body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: Arial, "Noto Sans Thai", Tahoma, sans-serif;
     background: #f8f7ff;
     color: #24233f;
   }
 
+  /* Language toggle: show only the active language */
+  body[data-lang="en"] .th { display: none !important; }
+  body[data-lang="th"] .en { display: none !important; }
+
   header {
     background: white;
-    padding: 20px 24px;
+    padding: 14px 24px;
     color: #392d83;
     font-weight: bold;
     font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
   }
+
+  .lang-switch button {
+    border: 1px solid #6a5acd;
+    background: white;
+    color: #6a5acd;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .lang-switch button:first-child { border-radius: 20px 0 0 20px; }
+  .lang-switch button:last-child { border-radius: 0 20px 20px 0; border-left: none; }
+  .lang-switch button.active { background: #6a5acd; color: white; }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #ffffffee;
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid #e4e0fa;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 10px 16px;
+    white-space: nowrap;
+  }
+  nav a {
+    color: #392d83;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 18px;
+    background: #efecff;
+  }
+  nav a:hover, nav a:focus { background: #6a5acd; color: white; }
 
   .hero {
     width: calc(100% - 40px);
@@ -50,19 +83,9 @@ content="default">
     background: linear-gradient(135deg, #e9e5ff, #fbeafa);
     text-align: center;
   }
-
-  .brain {
-    font-size: 75px;
-  }
-
-  h1 {
-    color: #392d83;
-    font-size: 32px;
-  }
-
-  p {
-    line-height: 1.6;
-  }
+  .brain { font-size: 75px; }
+  h1 { color: #392d83; font-size: 32px; }
+  p, li { line-height: 1.6; }
 
   .button {
     display: inline-block;
@@ -74,6 +97,11 @@ content="default">
     color: white;
     font-size: 15px;
     cursor: pointer;
+    text-decoration: none;
+  }
+  .button:focus-visible, nav a:focus-visible, .lang-switch button:focus-visible {
+    outline: 3px solid #392d83;
+    outline-offset: 2px;
   }
 
   .card {
@@ -86,9 +114,51 @@ content="default">
     box-shadow: 0 5px 18px #6a5acd15;
   }
 
-  h2, h3, h4 {
-    color: #392d83;
+  h2, h3, h4 { color: #392d83; }
+
+  .type-list, .trigger-grid, .phase-list {
+    display: grid;
+    gap: 12px;
+    padding: 0;
+    list-style: none;
   }
+  .type-list li, .trigger-grid li, .phase-list li {
+    background: #f4f2ff;
+    border-radius: 12px;
+    padding: 12px 16px;
+  }
+  .trigger-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .phase-list { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e4e0fa; vertical-align: top; }
+  th { color: #392d83; background: #f4f2ff; }
+
+  .note {
+    background: #fff8e6;
+    border-left: 4px solid #e0a800;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .warning {
+    border: 2px solid #c0392b;
+    background: #fff5f4;
+  }
+  .warning h2 { color: #a93226; }
+
+  .aura-art { text-align: center; margin: 16px 0; }
+  .aura-art svg { max-width: 100%; height: auto; border-radius: 14px; background: #1f1d3a; }
+  figcaption { font-size: 13px; color: #686780; margin-top: 6px; }
+
+  .symptom-list label { display: block; padding: 6px 0; cursor: pointer; }
+  .symptom-list input { margin-right: 8px; transform: scale(1.2); }
+  #result { font-weight: bold; min-height: 24px; }
+  #result.urgent { color: #a93226; }
+
+  .refs a { color: #4b3fb0; word-break: break-word; }
+  .cite { font-size: 12px; color: #686780; line-height: 1.5; }
 
   footer {
     text-align: center;
@@ -96,112 +166,429 @@ content="default">
     color: #686780;
     font-size: 13px;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
 </style>
-
 </head>
-<body>
 
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js");
-  });
-}
-</script>
+<body data-lang="en">
 
-<header>✦ MIGRAINE AWARENESS HUB</header>
+<header>
+  <span>✦ MIGRAINE AWARENESS HUB</span>
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button type="button" id="btn-en" class="active" onclick="setLang('en')">EN</button>
+    <button type="button" id="btn-th" onclick="setLang('th')">ไทย</button>
+  </div>
+</header>
 
-<section class="hero">
+<nav aria-label="Sections">
+  <a href="#about"><span class="en">About</span><span class="th">ไมเกรนคืออะไร</span></a>
+  <a href="#aura"><span class="en">Visual Aura</span><span class="th">อาการเตือนทางตา</span></a>
+  <a href="#related"><span class="en">Related Conditions</span><span class="th">ภาวะที่คล้ายไมเกรน</span></a>
+  <a href="#symptoms"><span class="en">Symptoms &amp; Triggers</span><span class="th">อาการและปัจจัยกระตุ้น</span></a>
+  <a href="#brain"><span class="en">Brain Science</span><span class="th">วิทยาศาสตร์สมอง</span></a>
+  <a href="#prevention"><span class="en">Prevention</span><span class="th">การดูแล</span></a>
+  <a href="#warning"><span class="en">When to Get Help</span><span class="th">เมื่อไรควรพบแพทย์</span></a>
+  <a href="#symptom-checker"><span class="en">Symptom Check</span><span class="th">เช็กอาการ</span></a>
+  <a href="#references"><span class="en">References</span><span class="th">แหล่งอ้างอิง</span></a>
+</nav>
+
+<!-- HOME -->
+<section class="hero" id="home">
   <div class="brain">🧠</div>
-  <h1>Understand Your Brain.</h1>
-  <p>Learn about migraine, visual aura, symptoms and related neurological conditions.</p>
-  <button class="button" onclick="document.getElementById('learn').scrollIntoView({behavior:'smooth'})">
-    Explore & Learn
-  </button>
+  <h1>
+    <span class="en">Understand Your Brain.</span>
+    <span class="th">ทำความเข้าใจสมองของคุณ</span>
+  </h1>
+  <p class="en">Learn about migraine, visual aura, symptoms and related neurological conditions.</p>
+  <p class="th">เรียนรู้เกี่ยวกับไมเกรน อาการเตือนทางการมองเห็น อาการ และภาวะทางระบบประสาทที่เกี่ยวข้อง</p>
+  <a class="button" href="#about">
+    <span class="en">Explore &amp; Learn</span><span class="th">เริ่มเรียนรู้</span>
+  </a>
+  <a class="button" href="#symptom-checker">
+    <span class="en">Start Symptom Check</span><span class="th">เริ่มเช็กอาการ</span>
+  </a>
 </section>
 
-<section class="card" id="learn">
-  <h2>Learn About Migraine</h2>
-  <p>Discover migraine symptoms, types and possible effects on the nervous system.</p>
-</section>
-
-<section class="card">
-  <h2>Visual Aura</h2>
-  <p>Learn about temporary visual changes such as flashing lights, zigzag patterns and blind spots.</p>
-</section>
-
-<section class="card">
-  <h2>Symptom Check</h2>
-  <p>This educational app helps you review common symptoms. It cannot diagnose migraine.</p>
-  <button class="button" onclick="alert('This feature will be developed in the next step.')">
-    Start Symptom Check
-  </button>
-</section>
-
-<section class="card" id="education">
-  <h2>Migraine Education</h2>
-  <p>Learn and understand migraine.</p>
-
-  <h3>What Is Migraine?</h3>
-  <p>
-    Migraine is a neurological disorder that can cause
-    recurring moderate to severe headaches.
+<section class="card note-card" style="padding:16px 24px;">
+  <p class="note" style="margin:0;">
+    <span class="en"><strong>Educational purposes only.</strong> This website does not provide a medical diagnosis. New, sudden, or unusual neurological or visual symptoms need prompt medical assessment.</span>
+    <span class="th"><strong>เพื่อการศึกษาเท่านั้น</strong> เว็บไซต์นี้ไม่ใช่การวินิจฉัยทางการแพทย์ หากมีอาการทางระบบประสาทหรือการมองเห็นที่เกิดขึ้นใหม่ ฉับพลัน หรือผิดปกติ ควรได้รับการประเมินจากแพทย์ทันที</span>
   </p>
+</section>
 
-  <h3>Common Symptoms</h3>
+<!-- 1-2. ABOUT MIGRAINE + TYPES -->
+<section class="card" id="about">
+  <h2><span class="en">What Is Migraine?</span><span class="th">โรคไมเกรนคืออะไร?</span></h2>
+
+  <div class="en">
+    <p>Migraine is a neurological disorder that causes recurring attacks of moderate to severe headache and other symptoms. The pain is often throbbing or pulsating and may occur on one side of the head. Other symptoms can include nausea, vomiting, and sensitivity to light and sound.</p>
+    <p>Migraine is more than an ordinary headache because it involves changes in how the nervous system functions. Some people experience visual or sensory symptoms known as aura before or during an attack.</p>
+  </div>
+  <div class="th">
+    <p>ไมเกรนเป็นโรคทางระบบประสาทที่ทำให้เกิดอาการปวดศีรษะเป็นครั้ง ๆ โดยอาจมีอาการปวดระดับปานกลางถึงรุนแรง ลักษณะปวดตุบ ๆ และมักเกิดบริเวณศีรษะข้างใดข้างหนึ่ง นอกจากนี้อาจมีอาการคลื่นไส้ อาเจียน และไวต่อแสงหรือเสียง</p>
+    <p>ไมเกรนแตกต่างจากอาการปวดศีรษะทั่วไป เนื่องจากเกี่ยวข้องกับการทำงานของระบบประสาท</p>
+  </div>
+
+  <h3><span class="en">Common Symptoms</span><span class="th">อาการที่พบบ่อย</span></h3>
   <ul>
-    <li>Throbbing headache</li>
-    <li>Nausea or vomiting</li>
-    <li>Sensitivity to light</li>
-    <li>Sensitivity to sound</li>
+    <li><span class="en">Throbbing headache</span><span class="th">ปวดศีรษะตุบ ๆ</span></li>
+    <li><span class="en">Nausea or vomiting</span><span class="th">คลื่นไส้หรืออาเจียน</span></li>
+    <li><span class="en">Sensitivity to light</span><span class="th">ไวต่อแสง</span></li>
+    <li><span class="en">Sensitivity to sound</span><span class="th">ไวต่อเสียง</span></li>
   </ul>
 
-  <h3>Visual Aura</h3>
-  <p>
-    Some people experience temporary visual symptoms,
-    such as flashing lights, zigzag lines, or blind spots.
+  <h3><span class="en">Types of Migraine</span><span class="th">ประเภทของไมเกรน</span></h3>
+  <ul class="type-list">
+    <li>
+      <strong>Migraine Without Aura</strong>
+      <div class="en">Migraine without neurological warning symptoms, such as seeing flashing lights before the headache.</div>
+      <div class="th">ไมเกรนที่ไม่มีอาการเตือนทางระบบประสาท เช่น การเห็นแสงกะพริบก่อนปวดศีรษะ</div>
+    </li>
+    <li>
+      <strong>Migraine With Aura</strong>
+      <div class="en">Migraine with temporary neurological symptoms, such as unusual vision, numbness or pins-and-needles, or difficulty speaking.</div>
+      <div class="th">ไมเกรนที่มีอาการทางระบบประสาทชั่วคราว เช่น การมองเห็นผิดปกติ ชาหรือรู้สึกเหมือนเข็มทิ่ม หรือมีปัญหาในการพูด</div>
+    </li>
+    <li>
+      <strong>Chronic Migraine</strong>
+      <div class="en">Headache on at least 15 days a month for more than 3 months, with migraine features on at least 8 of those days.</div>
+      <div class="th">ไมเกรนเรื้อรัง โดยมีอาการปวดศีรษะอย่างน้อย 15 วันต่อเดือน นานเกิน 3 เดือน และมีลักษณะเข้าเกณฑ์ไมเกรนอย่างน้อย 8 วันต่อเดือน</div>
+    </li>
+    <li>
+      <strong>Vestibular Migraine</strong>
+      <div class="en">Migraine linked to the balance system. It may cause dizziness, vertigo, or a feeling of being off balance.</div>
+      <div class="th">ไมเกรนที่เกี่ยวข้องกับระบบการทรงตัว อาจมีอาการเวียนศีรษะ บ้านหมุน หรือรู้สึกเสียสมดุล</div>
+    </li>
+    <li>
+      <strong>Menstrual Migraine</strong>
+      <div class="en">Migraine that occurs around the menstrual cycle and is linked to hormonal changes.</div>
+      <div class="th">ไมเกรนที่เกิดสัมพันธ์กับช่วงรอบเดือน โดยเกี่ยวข้องกับการเปลี่ยนแปลงของฮอร์โมน</div>
+    </li>
+  </ul>
+
+  <p class="cite">Sources: IHS, ICHD-3 (2018); WHO (2025); NHS (2026); Lempert et al. (2022).</p>
+</section>
+
+<!-- 3. VISUAL AURA -->
+<section class="card" id="aura">
+  <h2><span class="en">Visual Aura</span><span class="th">อาการเตือนทางการมองเห็น (Visual Aura)</span></h2>
+
+  <div class="en">
+    <p>Visual aura is a temporary visual disturbance that can occur before or during a migraine attack. It is associated with changes in neurological activity and may affect the way a person sees their surroundings.</p>
+  </div>
+  <div class="th">
+    <p>Visual Aura คืออาการผิดปกติทางการมองเห็นชั่วคราว ซึ่งอาจเกิดก่อนหรือระหว่างอาการไมเกรน เช่น การเห็นแสงกะพริบ เส้นซิกแซก หรือจุดบอดในลานสายตา</p>
+  </div>
+
+  <figure class="aura-art">
+    <svg viewBox="0 0 400 180" role="img" aria-label="Educational illustration of zigzag lines and flashing spots">
+      <defs>
+        <radialGradient id="glow"><stop offset="0" stop-color="#fff7b0"/><stop offset="1" stop-color="#fff7b000"/></radialGradient>
+      </defs>
+      <circle cx="90" cy="60" r="26" fill="url(#glow)"/>
+      <circle cx="310" cy="120" r="18" fill="url(#glow)"/>
+      <polyline points="40,130 70,100 100,130 130,100 160,130 190,100 220,130 250,100 280,130 310,100 340,130 370,100"
+        fill="none" stroke="#9fe3ff" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+      <polyline points="60,150 90,125 120,150 150,125 180,150 210,125 240,150 270,125 300,150"
+        fill="none" stroke="#e7b8ff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" opacity="0.8"/>
+      <ellipse cx="205" cy="62" rx="28" ry="20" fill="#1f1d3a" stroke="#ffffff55" stroke-dasharray="4 4"/>
+    </svg>
+    <figcaption>
+      <span class="en">Illustration for education only. It cannot accurately show the visual experience of every person.</span>
+      <span class="th">ภาพประกอบเพื่อการศึกษาเท่านั้น ไม่สามารถแสดงประสบการณ์การมองเห็นของผู้ป่วยทุกคนได้อย่างแม่นยำ</span>
+    </figcaption>
+  </figure>
+
+  <h3><span class="en">Common visual symptoms</span><span class="th">อาการทางการมองเห็นที่พบบ่อย</span></h3>
+  <ul>
+    <li><strong>Flashing Lights:</strong> <span class="en">seeing flashes or bright spots.</span><span class="th">เห็นแสงวาบหรือจุดสว่าง</span></li>
+    <li><strong>Zigzag Lines:</strong> <span class="en">seeing moving or shimmering zigzag patterns.</span><span class="th">เห็นเส้นซิกแซกที่เคลื่อนไหวหรือระยิบระยับ</span></li>
+    <li><strong>Blind Spots:</strong> <span class="en">temporary areas of missing vision.</span><span class="th">มีบริเวณที่มองไม่เห็นชั่วคราว</span></li>
+    <li><strong>Blurred Vision:</strong> <span class="en">temporary difficulty seeing clearly.</span><span class="th">มองไม่ชัดชั่วคราว</span></li>
+  </ul>
+
+  <p class="en">Typical aura symptoms usually develop gradually and last between 5 and 60 minutes. However, new or sudden visual disturbances should not automatically be assumed to be migraine aura.</p>
+  <p class="th">โดยทั่วไปอาการออร่าจะค่อย ๆ เกิดขึ้นและมีระยะเวลาประมาณ 5–60 นาที แต่หากเกิดความผิดปกติทางการมองเห็นเป็นครั้งแรกหรือเกิดขึ้นอย่างฉับพลัน ควรได้รับการประเมินจากแพทย์</p>
+
+  <p class="cite">Sources: IHS, ICHD-3 (2018); National Migraine Centre (n.d.).</p>
+</section>
+
+<!-- 4. RELATED CONDITIONS -->
+<section class="card" id="related">
+  <h2><span class="en">Related Conditions</span><span class="th">ภาวะที่เกี่ยวข้องหรืออาจมีอาการคล้ายไมเกรน</span></h2>
+
+  <p class="en">Several neurological and headache conditions may share symptoms with migraine. Understanding their differences is important because similar symptoms do not always indicate the same medical condition.</p>
+  <p class="th">ไม่ใช่ทุกอาการปวดศีรษะที่เป็นไมเกรน การเข้าใจความแตกต่างจึงเป็นเรื่องสำคัญ</p>
+
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr><th>Condition</th><th><span class="en">Description</span><span class="th">ความหมาย</span></th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Tension-Type Headache</strong></td>
+          <td>
+            <span class="en">Headache from tension, often felt like a band of pressure around the head.</span>
+            <span class="th">อาการปวดศีรษะจากความตึงเครียด มักรู้สึกเหมือนมีแรงกดรัดรอบศีรษะ</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Cluster Headache</strong></td>
+          <td>
+            <span class="en">Severe headaches that come in clusters, usually around one eye.</span>
+            <span class="th">อาการปวดศีรษะรุนแรงเป็นชุด มักเกิดรอบดวงตาข้างเดียว</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Medication-Overuse Headache</strong></td>
+          <td>
+            <span class="en">Headache linked to using pain relievers or headache medicines too often.</span>
+            <span class="th">อาการปวดศีรษะที่สัมพันธ์กับการใช้ยาแก้ปวดหรือยารักษาอาการปวดศีรษะบ่อยเกินไป</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Visual Snow Syndrome</strong></td>
+          <td>
+            <span class="en">A visual condition with its own diagnostic criteria. It is not a type of migraine, although it may occur alongside migraine.</span>
+            <span class="th">เป็นภาวะทางการมองเห็นที่มีเกณฑ์จำแนกของตัวเอง ไม่ใช่ชนิดของไมเกรน แม้อาจพบร่วมกับไมเกรนได้</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="cite">Sources: IHS, ICHD-3 (2018); WHO (2025).</p>
+</section>
+
+<!-- 5-6. SYMPTOMS, PHASES, TRIGGERS -->
+<section class="card" id="symptoms">
+  <h2><span class="en">Symptoms &amp; Phases</span><span class="th">ระยะและอาการของไมเกรน</span></h2>
+  <p class="en">A migraine attack can have up to 4 phases. Not everyone experiences all of them.</p>
+  <p class="th">ไมเกรนอาจแบ่งออกเป็น 4 ระยะ ไม่ใช่ทุกคนที่จะมีครบทั้ง 4 ระยะ และบางคนไม่มี</p>
+
+  <ul class="phase-list">
+    <li><strong>Prodrome</strong><br>
+      <span class="en">Before the headache: tiredness, frequent yawning, or mood changes.</span>
+      <span class="th">ระยะก่อนปวดศีรษะ เช่น เหนื่อย หาวบ่อย หรืออารมณ์เปลี่ยนแปลง</span></li>
+    <li><strong>Aura</strong><br>
+      <span class="en">Possible neurological symptoms, such as unusual visual disturbances.</span>
+      <span class="th">ระยะที่อาจมีอาการทางระบบประสาท เช่น มองเห็นแสงผิดปกติ</span></li>
+    <li><strong>Headache</strong><br>
+      <span class="en">The pain phase. May include nausea and sensitivity to light or sound.</span>
+      <span class="th">ระยะปวดศีรษะ อาจมีคลื่นไส้และไวต่อแสงหรือเสียง</span></li>
+    <li><strong>Postdrome</strong><br>
+      <span class="en">After the headache: possible exhaustion or difficulty concentrating.</span>
+      <span class="th">ระยะหลังปวดศีรษะ อาจรู้สึกอ่อนเพลียหรือไม่มีสมาธิ</span></li>
+  </ul>
+
+  <h2 style="margin-top:32px;"><span class="en">Migraine Triggers</span><span class="th">ปัจจัยที่อาจกระตุ้นไมเกรน</span></h2>
+  <p class="en">Migraine triggers are factors that may contribute to the onset of migraine attacks. They vary from person to person. Identifying personal patterns may help individuals understand and manage their symptoms.</p>
+
+  <ul class="trigger-grid">
+    <li><strong>Sleep Changes</strong><br><span class="en">Too little or irregular sleep</span><span class="th">การนอนหลับไม่เพียงพอหรือเวลานอนไม่สม่ำเสมอ</span></li>
+    <li><strong>Stress</strong><br><span class="en">Emotional or mental stress</span><span class="th">ความเครียด</span></li>
+    <li><strong>Dehydration</strong><br><span class="en">Not drinking enough water</span><span class="th">การดื่มน้ำไม่เพียงพอ</span></li>
+    <li><strong>Irregular Meals</strong><br><span class="en">Skipped or late meals</span><span class="th">การรับประทานอาหารไม่ตรงเวลา</span></li>
+    <li><strong>Environmental Factors</strong><br><span class="en">Bright light or certain surroundings</span><span class="th">แสงจ้าหรือสิ่งแวดล้อมบางอย่าง</span></li>
+    <li><strong>Hormonal Changes</strong><br><span class="en">Changes in hormone levels</span><span class="th">การเปลี่ยนแปลงของฮอร์โมน</span></li>
+  </ul>
+
+  <p class="note">
+    <span class="en">Triggers do not affect everyone. Do not try to trigger symptoms on purpose to test yourself.</span>
+    <span class="th">ปัจจัยเหล่านี้ไม่ได้กระตุ้นไมเกรนในทุกคน และไม่ควรทดลองทำให้เกิดอาการเพื่อทดสอบตัวเอง</span>
   </p>
 
-  <h3>ภาษาไทย</h3>
-  <p>
-    ไมเกรนเป็นความผิดปกติทางระบบประสาทที่ทำให้เกิด
-    อาการปวดศีรษะซ้ำ ๆ อาจมีอาการคลื่นไส้
-    ไวต่อแสงและเสียง หรือมีอาการผิดปกติทางการมองเห็น
-  </p>
+  <p class="cite">Sources: American Migraine Foundation (n.d.); NHS (2026); The Migraine Trust (n.d.).</p>
+</section>
+
+<!-- 7. BRAIN SCIENCE -->
+<section class="card" id="brain">
+  <h2><span class="en">Brain Science</span><span class="th">ไมเกรนเกิดขึ้นในสมองได้อย่างไร?</span></h2>
+
+  <p class="en">Migraine is associated with changes in brain and nervous system activity. Several neurological pathways are involved in migraine attacks. Three important components include:</p>
+  <p class="th">ไมเกรนเกี่ยวข้องกับการเปลี่ยนแปลงของการทำงานในสมองและระบบประสาท โดยมีองค์ประกอบสำคัญ ได้แก่</p>
+
+  <ul>
+    <li><strong>Trigeminal Nerve:</strong>
+      <span class="en">a major nerve pathway involved in transmitting pain signals from the head and face.</span>
+      <span class="th">เส้นประสาทที่เกี่ยวข้องกับการส่งสัญญาณความเจ็บปวดจากศีรษะและใบหน้า</span></li>
+    <li><strong>CGRP (Calcitonin Gene-Related Peptide):</strong>
+      <span class="en">a molecule involved in migraine-related pain signaling.</span>
+      <span class="th">สารที่เกี่ยวข้องกับกระบวนการส่งสัญญาณความเจ็บปวดในไมเกรน</span></li>
+    <li><strong>Visual Cortex:</strong>
+      <span class="en">the brain region that processes visual information and is involved in visual aura.</span>
+      <span class="th">บริเวณสมองที่ประมวลผลข้อมูลทางการมองเห็น และเกี่ยวข้องกับ visual aura</span></li>
+  </ul>
+
+  <p class="en">These mechanisms help researchers understand why migraine can cause both headache and neurological symptoms.</p>
+
+  <p class="cite">Sources: Puledda et al. (2023); Russo &amp; Hay (2023).</p>
+</section>
+
+<!-- 8. PREVENTION -->
+<section class="card" id="prevention">
+  <h2><span class="en">Prevention &amp; Management</span><span class="th">การดูแลและจัดการไมเกรน</span></h2>
+
+  <p class="en">Although migraine cannot always be prevented, certain habits may help individuals manage their symptoms.</p>
+  <p class="th">แม้จะไม่สามารถป้องกันไมเกรนได้ทั้งหมด แต่การดูแลสุขภาพอาจช่วยให้จัดการอาการได้ดีขึ้น</p>
+
+  <ul>
+    <li><span class="en">Maintain a regular sleep schedule.</span><span class="th">นอนให้เป็นเวลา</span></li>
+    <li><span class="en">Drink enough water.</span><span class="th">ดื่มน้ำให้เพียงพอ</span></li>
+    <li><span class="en">Eat meals regularly.</span><span class="th">รับประทานอาหารสม่ำเสมอ</span></li>
+    <li><span class="en">Identify personal migraine triggers.</span><span class="th">สังเกตปัจจัยกระตุ้นของตัวเอง</span></li>
+    <li><span class="en">Keep a headache diary.</span><span class="th">บันทึกอาการปวดศีรษะ</span></li>
+    <li><span class="en">Seek medical advice when symptoms are frequent, severe, or unusual.</span><span class="th">ปรึกษาแพทย์เมื่ออาการเกิดบ่อย รุนแรง หรือผิดปกติ</span></li>
+  </ul>
+
+  <p class="en"><strong>Treatment should be discussed with a qualified healthcare professional.</strong></p>
+  <p class="th"><strong>การรักษาควรปรึกษาบุคลากรทางการแพทย์</strong></p>
+
+  <p class="cite">Sources: NHS (2026); NICE CG150 (2012); The Migraine Trust (n.d.).</p>
+</section>
+
+<!-- 9. MEDICAL WARNING -->
+<section class="card warning" id="warning">
+  <h2>⚠️ <span class="en">Important Medical Warning</span><span class="th">อาการที่ควรได้รับการตรวจจากแพทย์</span></h2>
+
+  <p class="en">Seek medical care or emergency assessment if you have:</p>
+  <p class="th">ควรไปพบแพทย์หรือรับการประเมินฉุกเฉินเมื่อมีอาการ เช่น</p>
+
+  <ul>
+    <li><span class="en">A very severe headache that starts suddenly</span><span class="th">ปวดศีรษะรุนแรงมากและเกิดขึ้นอย่างฉับพลัน</span></li>
+    <li><span class="en">Sudden trouble speaking or confusion</span><span class="th">มีปัญหาในการพูดหรือสับสนอย่างฉับพลัน</span></li>
+    <li><span class="en">Sudden loss of vision or unusual vision changes</span><span class="th">สูญเสียการมองเห็นหรือมีการมองเห็นผิดปกติอย่างฉับพลัน</span></li>
+    <li><span class="en">New weakness or numbness on one side of the body</span><span class="th">มีอาการอ่อนแรงหรือชาครึ่งซีกที่เกิดขึ้นใหม่</span></li>
+    <li><span class="en">Headache with high fever or a stiff neck</span><span class="th">มีอาการปวดศีรษะร่วมกับไข้สูงหรือคอแข็ง</span></li>
+  </ul>
+
+  <p class="en"><strong>Do not assume it is migraine, especially when symptoms are new or sudden. Get medical help right away.</strong></p>
+  <p class="th"><strong>อย่าสรุปเองว่าเป็นไมเกรน โดยเฉพาะเมื่อเป็นอาการใหม่หรือเกิดขึ้นอย่างฉับพลัน ควรขอความช่วยเหลือทางการแพทย์ทันที</strong></p>
+
+  <p class="cite">Sources: NHS, Headaches (n.d.); NICE CG150 (2012).</p>
+</section>
+
+<!-- SYMPTOM CHECKER -->
+<section class="card" id="symptom-checker">
+  <h2><span class="en">Migraine Symptom Checker</span><span class="th">เช็กอาการไมเกรนเบื้องต้น</span></h2>
+  <p class="en">Select the symptoms you are experiencing:</p>
+  <p class="th">เลือกอาการที่คุณมีอยู่:</p>
+
+  <div class="symptom-list">
+    <label><input type="checkbox" class="symptom"> <span class="en">Throbbing headache</span><span class="th">ปวดศีรษะตุบ ๆ</span></label>
+    <label><input type="checkbox" class="symptom"> <span class="en">Nausea</span><span class="th">คลื่นไส้</span></label>
+    <label><input type="checkbox" class="symptom"> <span class="en">Sensitivity to light</span><span class="th">ไวต่อแสง</span></label>
+    <label><input type="checkbox" class="symptom"> <span class="en">Sensitivity to sound</span><span class="th">ไวต่อเสียง</span></label>
+    <label><input type="checkbox" class="symptom"> <span class="en">Visual aura (flashing lights, zigzag lines, blind spots)</span><span class="th">อาการเตือนทางตา (แสงวาบ เส้นซิกแซก จุดบอด)</span></label>
+  </div>
+
+  <h3 style="color:#a93226;"><span class="en">Warning signs</span><span class="th">สัญญาณอันตราย</span></h3>
+  <div class="symptom-list">
+    <label><input type="checkbox" class="redflag"> <span class="en">Very severe headache that started suddenly</span><span class="th">ปวดศีรษะรุนแรงมากอย่างฉับพลัน</span></label>
+    <label><input type="checkbox" class="redflag"> <span class="en">Sudden confusion or trouble speaking</span><span class="th">สับสนหรือพูดลำบากอย่างฉับพลัน</span></label>
+    <label><input type="checkbox" class="redflag"> <span class="en">Sudden vision loss or new vision changes</span><span class="th">สูญเสียการมองเห็นหรือมองเห็นผิดปกติอย่างฉับพลัน</span></label>
+    <label><input type="checkbox" class="redflag"> <span class="en">New weakness or numbness on one side</span><span class="th">อ่อนแรงหรือชาครึ่งซีกที่เกิดขึ้นใหม่</span></label>
+    <label><input type="checkbox" class="redflag"> <span class="en">Headache with high fever or stiff neck</span><span class="th">ปวดศีรษะร่วมกับไข้สูงหรือคอแข็ง</span></label>
+  </div>
+
+  <button type="button" class="button" onclick="checkSymptoms()">
+    <span class="en">Check Symptoms</span><span class="th">ตรวจสอบอาการ</span>
+  </button>
+  <p id="result" role="status" aria-live="polite"></p>
+  <small>
+    <span class="en">This tool is for education only. It does not diagnose migraine or determine your risk.</span>
+    <span class="th">เครื่องมือนี้เพื่อการศึกษาเท่านั้น ไม่สามารถวินิจฉัยไมเกรนหรือประเมินความเสี่ยงของคุณได้</span>
+  </small>
+</section>
+
+<!-- REFERENCES -->
+<section class="card refs" id="references">
+  <h2><span class="en">References</span><span class="th">แหล่งอ้างอิง</span></h2>
+  <ul>
+    <li><a href="https://ichd-3.org/1-migraine/" target="_blank" rel="noopener">International Headache Society — ICHD-3: Migraine</a></li>
+    <li><a href="https://ichd-3.org/1-migraine/1-2-migraine-with-aura/" target="_blank" rel="noopener">ICHD-3: Migraine with Aura</a></li>
+    <li><a href="https://www.nhs.uk/conditions/migraine/" target="_blank" rel="noopener">NHS — Migraine</a></li>
+    <li><a href="https://www.nhs.uk/symptoms/headaches/" target="_blank" rel="noopener">NHS — Headaches</a></li>
+    <li><a href="https://health.nih.gov/health-topics-a-z/migraine" target="_blank" rel="noopener">National Institutes of Health — Migraine</a></li>
+    <li><a href="https://www.nice.org.uk/guidance/cg150" target="_blank" rel="noopener">NICE — Headaches in over 12s (CG150)</a></li>
+    <li><a href="https://www.who.int/news-room/fact-sheets/detail/headache-disorders/" target="_blank" rel="noopener">World Health Organization — Headache Disorders</a></li>
+    <li><a href="https://americanmigrainefoundation.org/migraine-signs-symptoms/" target="_blank" rel="noopener">American Migraine Foundation — Migraine Signs &amp; Symptoms</a></li>
+    <li><a href="https://www.nationalmigrainecentre.org.uk/understanding-migraine/factsheets-and-resources/migraine-with-aura/" target="_blank" rel="noopener">National Migraine Centre — Migraine with Aura</a></li>
+    <li><a href="https://migrainetrust.org/live-with-migraine/self-management/common-triggers/" target="_blank" rel="noopener">The Migraine Trust — Migraine Attack Triggers</a></li>
+    <li><a href="https://doi.org/10.1177/0333102417738202" target="_blank" rel="noopener">IHS (2018). ICHD-3. Cephalalgia, 38(1), 1–211</a></li>
+    <li><a href="https://doi.org/10.3233/VES-201644" target="_blank" rel="noopener">Lempert et al. (2022). Vestibular migraine: Diagnostic criteria. J Vestib Res, 32(1), 1–6</a></li>
+    <li><a href="https://doi.org/10.1007/s00415-023-11706-1" target="_blank" rel="noopener">Puledda et al. (2023). Migraine: From pathophysiology to treatment. J Neurol, 270, 3654–3666</a></li>
+    <li><a href="https://doi.org/10.1152/physrev.00059.2021" target="_blank" rel="noopener">Russo &amp; Hay (2023). CGRP physiology, pharmacology, and therapeutic targets. Physiol Rev, 103(2), 1565–1644</a></li>
+  </ul>
 </section>
 
 <footer>
   Migraine Awareness Hub<br>
   Learn more. Feel more in control.<br>
   Educational purposes only — not a medical diagnosis.
-<section class="card" id="symptom-checker">
-  <h2>Migraine Symptom Checker</h2>
-  <p>Select the symptoms you are experiencing:</p>
-
-  <label><input type="checkbox" class="symptom"> Throbbing headache</label><br>
-  <label><input type="checkbox" class="symptom"> Nausea</label><br>
-  <label><input type="checkbox" class="symptom"> Sensitivity to light</label><br>
-  <label><input type="checkbox" class="symptom"> Sensitivity to sound</label><br>
-  <label><input type="checkbox" class="symptom"> Visual aura</label><br><br>
-
-  <button onclick="checkSymptoms()">Check Symptoms</button>
-  <p id="result"></p>
-  <small>This tool is for education only and cannot diagnose migraine.</small>
-</section>
+</footer>
 
 <script>
-function checkSymptoms() {
-  const selected = document.querySelectorAll('.symptom:checked').length;
-  const result = document.getElementById('result');
-
-  if (selected === 0) {
-    result.textContent = 'Please select at least one symptom.';
-  } else {
-    result.textContent = 'You selected ' + selected +
-      ' symptom(s). Consider discussing them with a healthcare professional.';
+  // Service worker (PWA)
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js");
+    });
   }
-}
-</script></footer>
+
+  // Language toggle
+  function setLang(lang) {
+    document.body.setAttribute("data-lang", lang);
+    document.documentElement.lang = lang;
+    document.getElementById("btn-en").classList.toggle("active", lang === "en");
+    document.getElementById("btn-th").classList.toggle("active", lang === "th");
+    try { localStorage.setItem("mah-lang", lang); } catch (e) {}
+    // Refresh result text if one is showing
+    if (document.getElementById("result").dataset.state) checkSymptoms();
+  }
+  try {
+    const saved = localStorage.getItem("mah-lang");
+    if (saved === "th" || saved === "en") setLang(saved);
+  } catch (e) {}
+
+  // Symptom checker
+  function checkSymptoms() {
+    const lang = document.body.getAttribute("data-lang");
+    const selected = document.querySelectorAll(".symptom:checked").length;
+    const flags = document.querySelectorAll(".redflag:checked").length;
+    const result = document.getElementById("result");
+    result.classList.remove("urgent");
+
+    const t = {
+      en: {
+        none: "Please select at least one symptom.",
+        urgent: "You selected a warning sign. Please seek medical care promptly. Do not assume this is migraine.",
+        some: n => "You selected " + n + " symptom(s). Consider discussing them with a healthcare professional."
+      },
+      th: {
+        none: "กรุณาเลือกอย่างน้อยหนึ่งอาการ",
+        urgent: "คุณเลือกสัญญาณอันตราย กรุณาไปพบแพทย์โดยเร็ว อย่าสรุปเองว่าเป็นไมเกรน",
+        some: n => "คุณเลือก " + n + " อาการ ควรปรึกษาบุคลากรทางการแพทย์"
+      }
+    }[lang];
+
+    if (flags > 0) {
+      result.textContent = t.urgent;
+      result.classList.add("urgent");
+      result.dataset.state = "urgent";
+    } else if (selected === 0) {
+      result.textContent = t.none;
+      result.dataset.state = "none";
+    } else {
+      result.textContent = t.some(selected);
+      result.dataset.state = "some";
+    }
+  }
+</script>
 
 </body>
 </html>
