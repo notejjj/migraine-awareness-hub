@@ -174,6 +174,34 @@ if ("serviceWorker" in navigator) {
   Migraine Awareness Hub<br>
   Learn more. Feel more in control.<br>
   Educational purposes only — not a medical diagnosis.
+<section class="card" id="symptom-checker">
+  <h2>Migraine Symptom Checker</h2>
+  <p>Select the symptoms you are experiencing:</p>
+
+  <label><input type="checkbox" class="symptom"> Throbbing headache</label><br>
+  <label><input type="checkbox" class="symptom"> Nausea</label><br>
+  <label><input type="checkbox" class="symptom"> Sensitivity to light</label><br>
+  <label><input type="checkbox" class="symptom"> Sensitivity to sound</label><br>
+  <label><input type="checkbox" class="symptom"> Visual aura</label><br><br>
+
+  <button onclick="checkSymptoms()">Check Symptoms</button>
+  <p id="result"></p>
+  <small>This tool is for education only and cannot diagnose migraine.</small>
+</section>
+
+<script>
+function checkSymptoms() {
+  const selected = document.querySelectorAll('.symptom:checked').length;
+  const result = document.getElementById('result');
+
+  if (selected === 0) {
+    result.textContent = 'Please select at least one symptom.';
+  } else {
+    result.textContent = 'You selected ' + selected +
+      ' symptom(s). Consider discussing them with a healthcare professional.';
+  }
+}
+</script>
 </footer>
 
 </body>
