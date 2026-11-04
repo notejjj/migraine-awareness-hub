@@ -535,10 +535,17 @@
 <script>
   // Service worker (PWA)
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./service-worker.js");
-    });
-  }
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js", { updateViaCache: "none" });
+  });
+  // Reload once when a new service worker takes over
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (reloaded) return;
+    reloaded = true;
+    location.reload();
+  });
+}
 
   // Language toggle
   function setLang(lang) {
