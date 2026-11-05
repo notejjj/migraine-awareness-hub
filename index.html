@@ -167,7 +167,78 @@
     font-size: 13px;
   }
 
+  /* Activities and quiz */
+  .activity { background: #f4f2ff; border-radius: 14px; padding: 16px; margin: 16px 0; }
+  .activity h3 { margin-top: 0; }
+  .mf-card { background: white; border: 1px solid #e4e0fa; border-radius: 12px; padding: 14px 16px; margin: 10px 0; }
+
+  .pill {
+    display: inline-block;
+    border: 2px solid #6a5acd;
+    background: white;
+    color: #392d83;
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin: 4px 4px 4px 0;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+  .pill:hover:not(:disabled) { background: #6a5acd; color: white; }
+  .pill:disabled { opacity: 0.6; cursor: default; }
+
+  .button.secondary { background: white; color: #6a5acd; border: 2px solid #6a5acd; }
+
+  .choice {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: white;
+    border: 2px solid #d9d4f5;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin: 8px 0;
+    font-size: 15px;
+    font-family: inherit;
+    color: #24233f;
+    cursor: pointer;
+  }
+  .choice:hover:not(:disabled) { border-color: #6a5acd; }
+  .choice:disabled { cursor: default; }
+  .choice.correct { border-color: #2e8b57; background: #e9f8ef; }
+  .choice.correct::after { content: " ✓"; font-weight: bold; }
+  .choice.wrong { border-color: #c0392b; background: #fdecea; }
+  .choice.wrong::after { content: " ✗"; font-weight: bold; }
+
+  .pill:focus-visible, .choice:focus-visible, select:focus-visible {
+    outline: 3px solid #392d83;
+    outline-offset: 2px;
+  }
+
+  .feedback { margin-top: 10px; padding: 10px 12px; border-radius: 8px; background: white; font-size: 14px; }
+  .ok { color: #2e8b57; font-weight: bold; }
+  .bad { color: #a93226; font-weight: bold; }
+
+  .progress { height: 8px; background: #e4e0fa; border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+  .progress div { height: 100%; background: #6a5acd; transition: width 0.3s; }
+
+  .slots { min-height: 56px; border: 2px dashed #b9b0ec; border-radius: 12px; padding: 8px; margin: 8px 0; background: white; }
+  .slots .empty { color: #686780; font-size: 14px; margin: 8px; }
+
+  .match-row { margin: 14px 0; }
+  select {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #b9b0ec;
+    font-size: 15px;
+    font-family: inherit;
+    max-width: 100%;
+    margin-top: 6px;
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    .progress div { transition: none; }
     html { scroll-behavior: auto; }
   }
 </style>
@@ -192,6 +263,8 @@
   <a href="#prevention"><span class="en">Prevention</span><span class="th">การดูแล</span></a>
   <a href="#warning"><span class="en">When to Get Help</span><span class="th">เมื่อไรควรพบแพทย์</span></a>
   <a href="#symptom-checker"><span class="en">Symptom Check</span><span class="th">เช็กอาการ</span></a>
+  <a href="#activities"><span class="en">Activities</span><span class="th">กิจกรรม</span></a>
+  <a href="#quiz"><span class="en">Quiz</span><span class="th">แบบทดสอบ</span></a>
   <a href="#references"><span class="en">References</span><span class="th">แหล่งอ้างอิง</span></a>
 </nav>
 
@@ -209,6 +282,9 @@
   </a>
   <a class="button" href="#symptom-checker">
     <span class="en">Start Symptom Check</span><span class="th">เริ่มเช็กอาการ</span>
+  </a>
+  <a class="button secondary" href="#quiz">
+    <span class="en">Take the Quiz</span><span class="th">ทำแบบทดสอบ</span>
   </a>
 </section>
 
@@ -505,6 +581,46 @@
   </small>
 </section>
 
+<!-- LEARNING ACTIVITIES -->
+<section class="card" id="activities">
+  <h2><span class="en">Learning Activities</span><span class="th">กิจกรรมเรียนรู้</span></h2>
+  <p class="en">Try these three short activities to check what you have learned above.</p>
+  <p class="th">ลองทำกิจกรรมสั้น ๆ สามอย่างนี้เพื่อทบทวนสิ่งที่เรียนรู้ด้านบน</p>
+
+  <div class="activity" id="act-myth">
+    <h3><span class="en">Activity 1: Myth or Fact?</span><span class="th">กิจกรรมที่ 1: ความเชื่อผิด ๆ หรือข้อเท็จจริง?</span></h3>
+    <div id="mf-list"></div>
+  </div>
+
+  <div class="activity" id="act-phases">
+    <h3><span class="en">Activity 2: Put the phases in order</span><span class="th">กิจกรรมที่ 2: เรียงลำดับระยะของไมเกรน</span></h3>
+    <p class="en">Tap the phases in the order a migraine attack usually unfolds. Tap a placed phase to take it back.</p>
+    <p class="th">แตะระยะตามลำดับที่ไมเกรนมักเกิดขึ้น แตะระยะที่วางแล้วเพื่อนำกลับ</p>
+    <div id="ph-slots" class="slots"></div>
+    <div id="ph-pool"></div>
+    <button type="button" class="button" onclick="checkPhases()"><span class="en">Check order</span><span class="th">ตรวจลำดับ</span></button>
+    <button type="button" class="button secondary" onclick="resetPhases()"><span class="en">Reset</span><span class="th">เริ่มใหม่</span></button>
+    <p id="ph-result" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="activity" id="act-match">
+    <h3><span class="en">Activity 3: Match the condition</span><span class="th">กิจกรรมที่ 3: จับคู่ภาวะกับคำอธิบาย</span></h3>
+    <p class="en">Not every headache is migraine. Choose the condition that fits each description.</p>
+    <p class="th">ไม่ใช่ทุกอาการปวดศีรษะที่เป็นไมเกรน เลือกภาวะที่ตรงกับแต่ละคำอธิบาย</p>
+    <div id="match-list"></div>
+    <button type="button" class="button" onclick="checkMatch()"><span class="en">Check answers</span><span class="th">ตรวจคำตอบ</span></button>
+    <p id="match-result" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section class="card" id="quiz">
+  <h2><span class="en">Migraine Knowledge Quiz</span><span class="th">แบบทดสอบความรู้เรื่องไมเกรน</span></h2>
+  <p class="en">10 questions based on this website. The quiz is for learning only.</p>
+  <p class="th">10 ข้อ จากเนื้อหาในเว็บไซต์นี้ แบบทดสอบนี้เพื่อการเรียนรู้เท่านั้น</p>
+  <div id="quiz-box"></div>
+</section>
+
 <!-- REFERENCES -->
 <section class="card refs" id="references">
   <h2><span class="en">References</span><span class="th">แหล่งอ้างอิง</span></h2>
@@ -535,17 +651,17 @@
 <script>
   // Service worker (PWA)
   if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js", { updateViaCache: "none" });
-  });
-  // Reload once when a new service worker takes over
-  let reloaded = false;
-  navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (reloaded) return;
-    reloaded = true;
-    location.reload();
-  });
-}
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js", { updateViaCache: "none" });
+    });
+    // Reload once when a new service worker takes over
+    let reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (reloaded) return;
+      reloaded = true;
+      location.reload();
+    });
+  }
 
   // Language toggle
   function setLang(lang) {
@@ -595,6 +711,327 @@
       result.dataset.state = "some";
     }
   }
+</script>
+
+<script>
+  // ---------- Helpers ----------
+  function bi(en, th) {
+    return '<span class="en">' + en + '</span><span class="th">' + th + '</span>';
+  }
+  function shuffle(a) {
+    const b = a.slice();
+    for (let i = b.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [b[i], b[j]] = [b[j], b[i]];
+    }
+    return b;
+  }
+
+  // ---------- Activity 1: Myth or Fact ----------
+  const MF = [
+    { en: "Migraine is just a bad headache.", th: "ไมเกรนก็แค่ปวดศีรษะมาก ๆ", fact: false,
+      xe: "Migraine is a neurological disorder. It involves changes in how the nervous system works and can also cause nausea and sensitivity to light and sound.",
+      xt: "ไมเกรนเป็นโรคทางระบบประสาท เกี่ยวข้องกับการทำงานของระบบประสาท และอาจมีคลื่นไส้ ไวต่อแสงและเสียงร่วมด้วย" },
+    { en: "Visual aura can include flashing lights, zigzag lines and blind spots.", th: "ออร่าทางการมองเห็นอาจเป็นแสงกะพริบ เส้นซิกแซก หรือจุดบอด", fact: true,
+      xe: "These are common visual aura symptoms. They are temporary and usually last 5 to 60 minutes.",
+      xt: "เป็นอาการออร่าทางการมองเห็นที่พบบ่อย เกิดชั่วคราว และมักนาน 5–60 นาที" },
+    { en: "Everyone with migraine has the same triggers.", th: "ทุกคนที่เป็นไมเกรนมีปัจจัยกระตุ้นเหมือนกัน", fact: false,
+      xe: "Triggers vary from person to person, and they do not affect everyone.",
+      xt: "ปัจจัยกระตุ้นแตกต่างกันในแต่ละคน และไม่ได้กระตุ้นไมเกรนในทุกคน" },
+    { en: "A sudden, very severe headache should always be assumed to be migraine.", th: "ปวดศีรษะรุนแรงมากอย่างฉับพลันควรสรุปไว้ก่อนว่าเป็นไมเกรน", fact: false,
+      xe: "Do not assume. A sudden, very severe headache is a warning sign that needs prompt medical care.",
+      xt: "ไม่ควรสรุปเอง การปวดศีรษะรุนแรงมากอย่างฉับพลันเป็นสัญญาณอันตรายที่ควรพบแพทย์โดยเร็ว" },
+    { en: "Keeping a headache diary can help you notice your own patterns.", th: "การจดบันทึกอาการปวดศีรษะช่วยให้สังเกตรูปแบบของตัวเองได้", fact: true,
+      xe: "A diary can help you identify personal triggers and give your doctor useful information.",
+      xt: "บันทึกช่วยให้รู้ปัจจัยกระตุ้นของตัวเอง และเป็นข้อมูลที่เป็นประโยชน์เมื่อไปพบแพทย์" },
+    { en: "Every migraine attack comes with visual aura.", th: "ไมเกรนทุกครั้งมีออร่าทางการมองเห็น", fact: false,
+      xe: "Migraine can occur without aura. Not everyone experiences aura or all four phases of an attack.",
+      xt: "ไมเกรนอาจเกิดโดยไม่มีออร่า และไม่ใช่ทุกคนที่มีออร่าหรือมีครบทั้ง 4 ระยะ" }
+  ];
+
+  function renderMF() {
+    document.getElementById("mf-list").innerHTML = MF.map(function (m, i) {
+      return '<div class="mf-card" id="mf-' + i + '">' +
+        '<p style="margin:0 0 8px;"><strong>' + bi(m.en, m.th) + '</strong></p>' +
+        '<button type="button" class="pill" onclick="answerMF(' + i + ',false)">' + bi("Myth", "ความเชื่อผิด ๆ") + '</button>' +
+        '<button type="button" class="pill" onclick="answerMF(' + i + ',true)">' + bi("Fact", "ข้อเท็จจริง") + '</button>' +
+        '<div class="feedback" id="mf-fb-' + i + '" role="status" hidden></div></div>';
+    }).join("");
+  }
+
+  function answerMF(i, guess) {
+    const m = MF[i];
+    const ok = guess === m.fact;
+    document.querySelectorAll("#mf-" + i + " button").forEach(function (b) { b.disabled = true; });
+    const fb = document.getElementById("mf-fb-" + i);
+    fb.hidden = false;
+    fb.innerHTML = '<span class="' + (ok ? "ok" : "bad") + '">' +
+      (ok ? bi("✓ Correct!", "✓ ถูกต้อง!") : bi("✗ Not quite.", "✗ ยังไม่ถูก")) + '</span> ' +
+      '<strong>' + (m.fact ? bi("This is a fact.", "ข้อนี้เป็นข้อเท็จจริง") : bi("This is a myth.", "ข้อนี้เป็นความเชื่อผิด ๆ")) + '</strong> ' +
+      bi(m.xe, m.xt);
+  }
+
+  // ---------- Activity 2: Phase order ----------
+  const PHASES = [
+    { id: "prodrome", name: "Prodrome", en: "Tiredness, frequent yawning, mood changes", th: "เหนื่อย หาวบ่อย อารมณ์เปลี่ยนแปลง" },
+    { id: "aura", name: "Aura", en: "Unusual vision or other neurological symptoms", th: "มองเห็นผิดปกติหรือมีอาการทางระบบประสาท" },
+    { id: "headache", name: "Headache", en: "Pain, possibly with nausea and sensitivity to light or sound", th: "ปวดศีรษะ อาจมีคลื่นไส้ ไวต่อแสงหรือเสียง" },
+    { id: "postdrome", name: "Postdrome", en: "Exhaustion or difficulty concentrating afterwards", th: "อ่อนเพลียหรือไม่มีสมาธิหลังปวด" }
+  ];
+  let phPool = [], phPicked = [];
+
+  function phaseById(id) { return PHASES.filter(function (p) { return p.id === id; })[0]; }
+  function phaseChip(id, handler) {
+    const p = phaseById(id);
+    return '<button type="button" class="pill" onclick="' + handler + "('" + id + "')" + '">' +
+      '<strong>' + p.name + '</strong> – ' + bi(p.en, p.th) + '</button>';
+  }
+  function renderPhases() {
+    const slots = document.getElementById("ph-slots");
+    slots.innerHTML = phPicked.length === 0
+      ? '<p class="empty">' + bi("Tap a phase below to place it here.", "แตะระยะด้านล่างเพื่อวางที่นี่") + '</p>'
+      : phPicked.map(function (id, i) { return '<div>' + (i + 1) + '. ' + phaseChip(id, "unpickPhase") + '</div>'; }).join("");
+    document.getElementById("ph-pool").innerHTML = phPool.map(function (id) { return phaseChip(id, "pickPhase"); }).join("");
+  }
+  function pickPhase(id) { phPool = phPool.filter(function (x) { return x !== id; }); phPicked.push(id); renderPhases(); }
+  function unpickPhase(id) { phPicked = phPicked.filter(function (x) { return x !== id; }); phPool.push(id); renderPhases(); }
+  function resetPhases() {
+    const correct = PHASES.map(function (p) { return p.id; });
+    let s;
+    do { s = shuffle(correct); } while (s.join() === correct.join());
+    phPool = s; phPicked = [];
+    document.getElementById("ph-result").textContent = "";
+    renderPhases();
+  }
+  function checkPhases() {
+    const r = document.getElementById("ph-result");
+    if (phPicked.length < PHASES.length) {
+      r.innerHTML = bi("Place all four phases first.", "กรุณาวางให้ครบทั้งสี่ระยะก่อน");
+      return;
+    }
+    const ok = phPicked.join() === PHASES.map(function (p) { return p.id; }).join();
+    r.innerHTML = ok
+      ? '<span class="ok">' + bi("✓ Correct! Prodrome, Aura, Headache, Postdrome. Not everyone has all four phases.", "✓ ถูกต้อง! Prodrome, Aura, Headache, Postdrome ไม่ใช่ทุกคนที่มีครบทั้ง 4 ระยะ") + '</span>'
+      : '<span class="bad">' + bi("✗ Not quite. Try again, or tap Reset.", "✗ ยังไม่ถูก ลองอีกครั้งหรือกดเริ่มใหม่") + '</span>';
+  }
+
+  // ---------- Activity 3: Match the condition ----------
+  const CONDS = [
+    { id: "tension", name: "Tension-Type Headache" },
+    { id: "cluster", name: "Cluster Headache" },
+    { id: "moh", name: "Medication-Overuse Headache" },
+    { id: "vss", name: "Visual Snow Syndrome" }
+  ];
+  const CLUES = [
+    { c: "cluster", en: "Severe headaches that come in clusters, usually around one eye.", th: "ปวดศีรษะรุนแรงเป็นชุด มักเกิดรอบดวงตาข้างเดียว" },
+    { c: "vss", en: "A visual condition with its own criteria. Not a type of migraine, but may occur alongside it.", th: "ภาวะทางการมองเห็นที่มีเกณฑ์ของตัวเอง ไม่ใช่ชนิดของไมเกรน แต่อาจพบร่วมกับไมเกรนได้" },
+    { c: "tension", en: "Often felt like a band of pressure around the head.", th: "มักรู้สึกเหมือนมีแรงกดรัดรอบศีรษะ" },
+    { c: "moh", en: "Linked to using pain relievers or headache medicines too often.", th: "สัมพันธ์กับการใช้ยาแก้ปวดหรือยารักษาอาการปวดศีรษะบ่อยเกินไป" }
+  ];
+  function renderMatch() {
+    const opts = '<option value="">—</option>' + shuffle(CONDS).map(function (c) {
+      return '<option value="' + c.id + '">' + c.name + '</option>';
+    }).join("");
+    document.getElementById("match-list").innerHTML = CLUES.map(function (cl, i) {
+      return '<div class="match-row"><label for="match-' + i + '">' + bi(cl.en, cl.th) + '</label><br>' +
+        '<select id="match-' + i + '">' + opts + '</select> <span id="match-mark-' + i + '"></span></div>';
+    }).join("");
+  }
+  function checkMatch() {
+    let right = 0, empty = 0;
+    CLUES.forEach(function (cl, i) {
+      const v = document.getElementById("match-" + i).value;
+      const mark = document.getElementById("match-mark-" + i);
+      if (!v) { empty++; mark.innerHTML = ""; return; }
+      if (v === cl.c) { right++; mark.innerHTML = '<span class="ok">✓</span>'; }
+      else { mark.innerHTML = '<span class="bad">✗</span>'; }
+    });
+    const r = document.getElementById("match-result");
+    if (empty > 0) {
+      r.innerHTML = bi("Choose an answer for every description first.", "กรุณาเลือกคำตอบให้ครบทุกข้อก่อน");
+    } else {
+      r.innerHTML = bi("You matched " + right + " of " + CLUES.length + ".", "คุณจับคู่ถูก " + right + " จาก " + CLUES.length + " ข้อ") +
+        (right === CLUES.length ? " 🎉" : " " + bi("Fix the ✗ items and check again.", "แก้ข้อที่มี ✗ แล้วตรวจอีกครั้ง"));
+    }
+  }
+
+  // ---------- Quiz ----------
+  const QUIZ = [
+    { en: "What is migraine?", th: "ไมเกรนคืออะไร?",
+      o: [
+        { ok: true, en: "A neurological disorder that causes recurring attacks of headache and other symptoms", th: "โรคทางระบบประสาทที่ทำให้ปวดศีรษะเป็นครั้ง ๆ และอาจมีอาการอื่นร่วมด้วย" },
+        { en: "Just an ordinary headache from stress", th: "แค่ปวดศีรษะทั่วไปจากความเครียด" },
+        { en: "An eye disease", th: "โรคของดวงตา" },
+        { en: "An infection of the brain", th: "การติดเชื้อในสมอง" }
+      ],
+      xe: "Migraine involves changes in how the nervous system functions, which is why it is more than an ordinary headache.",
+      xt: "ไมเกรนเกี่ยวข้องกับการเปลี่ยนแปลงของการทำงานของระบบประสาท จึงไม่ใช่แค่อาการปวดศีรษะทั่วไป" },
+
+    { en: "How long do typical aura symptoms last?", th: "อาการออร่าโดยทั่วไปนานเท่าไร?",
+      o: [
+        { ok: true, en: "About 5 to 60 minutes", th: "ประมาณ 5–60 นาที" },
+        { en: "A few seconds", th: "ไม่กี่วินาที" },
+        { en: "More than 24 hours", th: "มากกว่า 24 ชั่วโมง" },
+        { en: "Several weeks", th: "หลายสัปดาห์" }
+      ],
+      xe: "Aura usually develops gradually and lasts 5 to 60 minutes. New or sudden visual disturbances should not automatically be assumed to be aura.",
+      xt: "ออร่ามักค่อย ๆ เกิดขึ้นและนานประมาณ 5–60 นาที แต่ความผิดปกติทางการมองเห็นที่เกิดใหม่หรือฉับพลันไม่ควรสรุปเองว่าเป็นออร่า" },
+
+    { en: "Which of these is NOT a common visual aura symptom?", th: "ข้อใดไม่ใช่อาการออร่าทางการมองเห็นที่พบบ่อย?",
+      o: [
+        { ok: true, en: "High fever", th: "ไข้สูง" },
+        { en: "Flashing lights", th: "แสงกะพริบ" },
+        { en: "Zigzag lines", th: "เส้นซิกแซก" },
+        { en: "Temporary blind spots", th: "จุดบอดชั่วคราว" }
+      ],
+      xe: "Flashing lights, zigzag lines and blind spots are common visual aura symptoms. A headache with high fever is a warning sign that needs medical attention.",
+      xt: "แสงกะพริบ เส้นซิกแซก และจุดบอดเป็นอาการออร่าที่พบบ่อย ส่วนปวดศีรษะร่วมกับไข้สูงเป็นสัญญาณอันตรายที่ควรพบแพทย์" },
+
+    { en: "Which describes chronic migraine?", th: "ข้อใดอธิบายไมเกรนเรื้อรัง?",
+      o: [
+        { ok: true, en: "Headache on at least 15 days a month for more than 3 months", th: "ปวดศีรษะอย่างน้อย 15 วันต่อเดือน นานเกิน 3 เดือน" },
+        { en: "One attack per year", th: "ปวดปีละครั้ง" },
+        { en: "Headache only around the menstrual cycle", th: "ปวดเฉพาะช่วงรอบเดือน" },
+        { en: "Only migraines that have aura", th: "เฉพาะไมเกรนที่มีออร่า" }
+      ],
+      xe: "On at least 8 of those days, the headache must have migraine features.",
+      xt: "ในจำนวนนั้นต้องมีอย่างน้อย 8 วันที่ลักษณะเข้าเกณฑ์ไมเกรน" },
+
+    { en: "Vestibular migraine is most linked to which symptoms?", th: "ไมเกรนชนิด Vestibular เกี่ยวข้องกับอาการใดมากที่สุด?",
+      o: [
+        { ok: true, en: "Dizziness, vertigo or feeling off balance", th: "เวียนศีรษะ บ้านหมุน หรือรู้สึกเสียสมดุล" },
+        { en: "Pain around one eye in clusters", th: "ปวดรอบดวงตาข้างเดียวเป็นชุด" },
+        { en: "A band of pressure around the head", th: "แรงกดรัดรอบศีรษะ" },
+        { en: "Using pain relievers too often", th: "ใช้ยาแก้ปวดบ่อยเกินไป" }
+      ],
+      xe: "Vestibular migraine is linked to the balance system.",
+      xt: "ไมเกรนชนิดนี้เกี่ยวข้องกับระบบการทรงตัว" },
+
+    { en: "What is Visual Snow Syndrome?", th: "Visual Snow Syndrome คืออะไร?",
+      o: [
+        { ok: true, en: "A visual condition with its own criteria, not a type of migraine", th: "ภาวะทางการมองเห็นที่มีเกณฑ์จำแนกของตัวเอง ไม่ใช่ชนิดของไมเกรน" },
+        { en: "A type of migraine with aura", th: "ไมเกรนชนิดหนึ่งที่มีออร่า" },
+        { en: "Another name for chronic migraine", th: "อีกชื่อหนึ่งของไมเกรนเรื้อรัง" },
+        { en: "A kind of cluster headache", th: "ปวดศีรษะคลัสเตอร์ชนิดหนึ่ง" }
+      ],
+      xe: "It may occur alongside migraine, but it is classified separately.",
+      xt: "อาจพบร่วมกับไมเกรนได้ แต่จัดเป็นภาวะแยกต่างหาก" },
+
+    { en: "Tiredness, frequent yawning and mood changes before the headache belong to which phase?", th: "อาการเหนื่อย หาวบ่อย และอารมณ์เปลี่ยนก่อนปวดศีรษะ จัดอยู่ในระยะใด?",
+      o: [
+        { ok: true, en: "Prodrome", th: "Prodrome" },
+        { en: "Aura", th: "Aura" },
+        { en: "Headache", th: "Headache" },
+        { en: "Postdrome", th: "Postdrome" }
+      ],
+      xe: "Prodrome comes before the headache. Not everyone experiences all four phases.",
+      xt: "Prodrome เกิดก่อนปวดศีรษะ และไม่ใช่ทุกคนที่มีครบทั้ง 4 ระยะ" },
+
+    { en: "What is true about migraine triggers?", th: "ข้อใดถูกต้องเกี่ยวกับปัจจัยกระตุ้นไมเกรน?",
+      o: [
+        { ok: true, en: "They vary from person to person", th: "แตกต่างกันในแต่ละคน" },
+        { en: "They are the same for everyone", th: "เหมือนกันทุกคน" },
+        { en: "Stress and sleep changes are never triggers", th: "ความเครียดและการนอนที่เปลี่ยนไปไม่เคยเป็นปัจจัยกระตุ้น" },
+        { en: "You should trigger symptoms on purpose to test yourself", th: "ควรลองทำให้เกิดอาการเพื่อทดสอบตัวเอง" }
+      ],
+      xe: "A headache diary can help you spot your own patterns. Do not try to trigger an attack on purpose.",
+      xt: "การจดบันทึกอาการช่วยให้สังเกตรูปแบบของตัวเองได้ และไม่ควรลองทำให้เกิดอาการเพื่อทดสอบตัวเอง" },
+
+    { en: "What is CGRP?", th: "CGRP คืออะไร?",
+      o: [
+        { ok: true, en: "A molecule involved in migraine-related pain signaling", th: "สารที่เกี่ยวข้องกับการส่งสัญญาณความเจ็บปวดในไมเกรน" },
+        { en: "A brain region that processes vision", th: "บริเวณสมองที่ประมวลผลการมองเห็น" },
+        { en: "A nerve pathway carrying pain from the face", th: "เส้นประสาทที่ส่งสัญญาณความเจ็บปวดจากใบหน้า" },
+        { en: "A type of visual aura", th: "อาการออร่าทางการมองเห็นชนิดหนึ่ง" }
+      ],
+      xe: "The visual cortex processes vision, and the trigeminal nerve carries pain signals from the head and face.",
+      xt: "Visual cortex ประมวลผลการมองเห็น ส่วน Trigeminal nerve ส่งสัญญาณความเจ็บปวดจากศีรษะและใบหน้า" },
+
+    { en: "Someone has a sudden, very severe headache with confusion and trouble speaking. What is the best advice?", th: "มีอาการปวดศีรษะรุนแรงมากอย่างฉับพลัน ร่วมกับสับสนและพูดลำบาก คำแนะนำที่ดีที่สุดคืออะไร?",
+      o: [
+        { ok: true, en: "Seek medical care right away", th: "ขอความช่วยเหลือทางการแพทย์ทันที" },
+        { en: "Assume it is migraine and wait", th: "สรุปว่าเป็นไมเกรนแล้วรอดูอาการ" },
+        { en: "Take extra pain medicine and sleep", th: "กินยาแก้ปวดเพิ่มแล้วนอนพัก" },
+        { en: "Search online for a diagnosis", th: "ค้นหาข้อมูลออนไลน์เพื่อวินิจฉัยเอง" }
+      ],
+      xe: "These are warning signs. Do not assume it is migraine, especially when symptoms are new or sudden.",
+      xt: "เป็นสัญญาณอันตราย อย่าสรุปเองว่าเป็นไมเกรน โดยเฉพาะเมื่อเป็นอาการใหม่หรือเกิดขึ้นอย่างฉับพลัน" }
+  ];
+
+  let qs = [], qi = 0, score = 0, locked = false;
+
+  function startQuiz() {
+    qs = shuffle(QUIZ).map(function (q) {
+      return { en: q.en, th: q.th, xe: q.xe, xt: q.xt, o: shuffle(q.o) };
+    });
+    qi = 0; score = 0; locked = false;
+    renderQuiz();
+  }
+
+  function renderQuiz() {
+    const box = document.getElementById("quiz-box");
+    const total = qs.length;
+
+    if (qi >= total) {
+      const msg = score >= 8
+        ? bi("Great work! You have a solid understanding of the basics.", "ยอดเยี่ยม! คุณเข้าใจพื้นฐานได้ดี")
+        : score >= 5
+          ? bi("Good start. Review the sections above and try again.", "เริ่มต้นได้ดี ลองทบทวนเนื้อหาด้านบนแล้วทำอีกครั้ง")
+          : bi("Keep learning. Read the sections above, then try again.", "เรียนรู้ต่อไป อ่านเนื้อหาด้านบนแล้วลองทำอีกครั้ง");
+      box.innerHTML =
+        '<div class="progress" aria-hidden="true"><div style="width:100%"></div></div>' +
+        '<h3>' + bi("Your score: ", "คะแนนของคุณ: ") + score + ' / ' + total + '</h3>' +
+        '<p>' + msg + '</p>' +
+        '<p class="note">' + bi("This quiz is for education only. It does not diagnose or assess your health.", "แบบทดสอบนี้เพื่อการศึกษาเท่านั้น ไม่ใช่การวินิจฉัยหรือประเมินสุขภาพของคุณ") + '</p>' +
+        '<button type="button" class="button" onclick="startQuiz()">' + bi("Try again", "ทำอีกครั้ง") + '</button>' +
+        '<a class="button secondary" href="#about">' + bi("Review the lessons", "ทบทวนเนื้อหา") + '</a>';
+      return;
+    }
+
+    const q = qs[qi];
+    box.innerHTML =
+      '<div class="progress" aria-hidden="true"><div style="width:' + (qi / total * 100) + '%"></div></div>' +
+      '<p class="cite">' + bi("Question " + (qi + 1) + " of " + total, "ข้อ " + (qi + 1) + " จาก " + total) + '</p>' +
+      '<h3>' + bi(q.en, q.th) + '</h3>' +
+      q.o.map(function (o, i) {
+        return '<button type="button" class="choice" id="qo-' + i + '" onclick="answerQuiz(' + i + ')">' + bi(o.en, o.th) + '</button>';
+      }).join("") +
+      '<div id="q-fb" class="feedback" role="status" hidden></div>' +
+      '<div id="q-next"></div>';
+  }
+
+  function answerQuiz(i) {
+    if (locked) return;
+    locked = true;
+    const q = qs[qi];
+    const ok = !!q.o[i].ok;
+    if (ok) score++;
+    q.o.forEach(function (o, k) {
+      const b = document.getElementById("qo-" + k);
+      b.disabled = true;
+      if (o.ok) b.classList.add("correct");
+      else if (k === i) b.classList.add("wrong");
+    });
+    const fb = document.getElementById("q-fb");
+    fb.hidden = false;
+    fb.innerHTML = '<span class="' + (ok ? "ok" : "bad") + '">' +
+      (ok ? bi("✓ Correct!", "✓ ถูกต้อง!") : bi("✗ Not quite.", "✗ ยังไม่ถูก")) + '</span> ' + bi(q.xe, q.xt);
+    document.getElementById("q-next").innerHTML =
+      '<button type="button" class="button" onclick="nextQuiz()">' +
+      (qi + 1 < qs.length ? bi("Next question", "ข้อต่อไป") : bi("See results", "ดูผลคะแนน")) + '</button>';
+  }
+
+  function nextQuiz() {
+    qi++;
+    locked = false;
+    renderQuiz();
+  }
+
+  // ---------- Init ----------
+  renderMF();
+  resetPhases();
+  renderMatch();
+  startQuiz();
 </script>
 
 </body>
